@@ -1,6 +1,6 @@
 package com.karan.todoroomdatabaseapp
 
-data class DataInterface(
+data class DataClass(
     var title:String="",
     var description:String=""
 )

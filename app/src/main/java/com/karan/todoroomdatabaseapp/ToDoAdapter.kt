@@ -1,5 +1,6 @@
 package com.karan.todoroomdatabaseapp
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,7 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ToDoAdapter(var array: ArrayList<DataInterface>, private var Interface: Interface) :
+class ToDoAdapter(var array: ArrayList<ToDoEntity>, private var Interface: Interface) :
     RecyclerView.Adapter<ToDoAdapter.ViewHolder>() {
     class ViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.findViewById(R.id.title)

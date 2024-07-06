@@ -14,8 +14,9 @@ import com.karan.todoroomdatabaseapp.databinding.CustomDialogboxBinding
 
 class MainActivity : AppCompatActivity(),Interface{
     lateinit var binding: ActivityMainBinding
-    var array = arrayListOf<DataInterface>()
+    var array = arrayListOf<ToDoEntity>()
     var toDoAdapter = ToDoAdapter(array,this)
+    lateinit var toDoDatabase: ToDoDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -26,7 +27,8 @@ class MainActivity : AppCompatActivity(),Interface{
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        var linearLayoutmanager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        toDoDatabase = ToDoDatabase.getInstance(this)
+        var linearLayoutmanager = LinearLayoutManager(this)
         binding.recyclerList.layoutManager = linearLayoutmanager
         binding.recyclerList.adapter = toDoAdapter
         binding.recyclerList.setHasFixedSize(true)
@@ -39,10 +41,10 @@ class MainActivity : AppCompatActivity(),Interface{
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 )
                 dialogBinding.btnaddCustom.setOnClickListener {
-                    array.add(DataInterface(dialogBinding.ettitleCDB.text.toString()))
-                    array.add(DataInterface(dialogBinding.etdescritionCDB.text.toString()))
+                    array.addAll(toDoDatabase.todointerface().insertValue(ToDoEntity(title = dialogBinding.ettitleCDB.text.toString())))
                     toDoAdapter.notifyDataSetChanged()
                     dismiss()
+                    getData()
                 }
                 show()
             }
@@ -64,7 +66,6 @@ class MainActivity : AppCompatActivity(),Interface{
             setCancelable(false)
         }
             .show()
-
     }
 
     override fun UpdateData(position: Int) {
@@ -86,11 +87,16 @@ class MainActivity : AppCompatActivity(),Interface{
                 dialogBinding.ettitleCDB.error = "Enter Title"
             } else {
 
-                 array[position] = DataInterface(dialogBinding.ettitleCDB.text.toString())
+//                 array[position] = DataClass(dialogBinding.ettitleCDB.text.toString())
 
               toDoAdapter.notifyDataSetChanged()
                 update_dialog.dismiss()
             }
         }
+    }
+    fun getData()
+    {
+        array.addAll(toDoDatabase.todointerface().getList())
+        toDoAdapter.notifyDataSetChanged()
     }
 }

@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.karan.todoroomdatabaseapp.databinding.ActivityMainBinding
 import com.karan.todoroomdatabaseapp.databinding.CustomDialogboxBinding
 
-class MainActivity : AppCompatActivity(),Interface{
+class MainActivity : AppCompatActivity(), Interface {
     lateinit var binding: ActivityMainBinding
     var array = arrayListOf<ToDoEntity>()
-    var toDoAdapter = ToDoAdapter(array,this)
+    var toDoAdapter = ToDoAdapter(array, this)
     lateinit var toDoDatabase: ToDoDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,13 +40,18 @@ class MainActivity : AppCompatActivity(),Interface{
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 )
+                show()
                 dialogBinding.btnaddCustom.setOnClickListener {
-                    array.addAll(toDoDatabase.todointerface().insertValue(ToDoEntity(title = dialogBinding.ettitleCDB.text.toString())))
+
+                    val toDoEntity = ToDoEntity(
+                        title = dialogBinding.ettitleCDB.text.toString(),
+                        description = dialogBinding.etdescritionCDB.text.toString()
+                    )
+                    toDoDatabase.todointerface().insertValue(toDoEntity)
                     toDoAdapter.notifyDataSetChanged()
                     dismiss()
                     getData()
                 }
-                show()
             }
         }
     }
@@ -56,7 +61,7 @@ class MainActivity : AppCompatActivity(),Interface{
             setTitle("Are you sure")
             setPositiveButton("yes")
             { _, _ ->
-                array.removeAt(position)
+                toDoDatabase.todointerface().deleteValue(array[position])
                 toDoAdapter.notifyDataSetChanged()
             }
             setNegativeButton("No")
@@ -65,7 +70,9 @@ class MainActivity : AppCompatActivity(),Interface{
             }
             setCancelable(false)
         }
+
             .show()
+        getData()
     }
 
     override fun UpdateData(position: Int) {
@@ -78,8 +85,10 @@ class MainActivity : AppCompatActivity(),Interface{
             )
             show()
         }
-        val oldName: String = array[position].title ?: ""
-        dialogBinding.ettitleCDB.setText(oldName)
+        val oldTitle: String = array[position].title ?: ""
+        val oldDescription: String = array[position].description ?: ""
+        dialogBinding.ettitleCDB.setText(oldTitle)
+        dialogBinding.etdescritionCDB.setText(oldDescription)
         val update = "update"
         dialogBinding.btnaddCustom.text = update
         dialogBinding.btnaddCustom.setOnClickListener {
@@ -87,15 +96,21 @@ class MainActivity : AppCompatActivity(),Interface{
                 dialogBinding.ettitleCDB.error = "Enter Title"
             } else {
 
-//                 array[position] = DataClass(dialogBinding.ettitleCDB.text.toString())
-
-              toDoAdapter.notifyDataSetChanged()
+                val recentValue = ToDoEntity(
+                    id = array[position].id,
+                    title = dialogBinding.ettitleCDB.text.toString(),
+                    description = dialogBinding.etdescritionCDB.text.toString()
+                )
+                toDoDatabase.todointerface().updateValue(recentValue)
+                array[position] = recentValue
+                toDoAdapter.notifyDataSetChanged()
                 update_dialog.dismiss()
             }
         }
     }
-    fun getData()
-    {
+
+    fun getData() {
+        array.clear()
         array.addAll(toDoDatabase.todointerface().getList())
         toDoAdapter.notifyDataSetChanged()
     }

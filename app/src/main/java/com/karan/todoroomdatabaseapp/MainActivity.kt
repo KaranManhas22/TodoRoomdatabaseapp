@@ -52,7 +52,57 @@ class MainActivity : AppCompatActivity(), Interface {
                     dismiss()
                     getData()
                 }
+                binding.ALLRB.setOnCheckedChangeListener { buttonView, isChecked ->
+                    if (isChecked) {
+
+                        getData()
+                    }
+                }
+                binding.LRB.setOnCheckedChangeListener { buttonView, isChecked ->
+                    if (isChecked) {
+                        array.clear()
+                        toDoDatabase.todointerface().insertValue(
+                            ToDoEntity(
+                                title = dialogBinding.ettitleCDB.text.toString(),
+                                description = dialogBinding.etdescritionCDB.text.toString(),
+                                priority = 0
+                            )
+                        )
+                        array.addAll(toDoDatabase.todointerface().entityPriority(0))
+                        toDoAdapter.notifyDataSetChanged()
+                    }
+                }
+                binding.MRB.setOnCheckedChangeListener { buttonView, isChecked ->
+                    if (isChecked) {
+                        array.clear()
+                        toDoDatabase.todointerface().insertValue(
+                            ToDoEntity(
+                                title = dialogBinding.ettitleCDB.text.toString(),
+                                description = dialogBinding.etdescritionCDB.text.toString(),
+                                priority = 1
+                            )
+                        )
+                        array.addAll(toDoDatabase.todointerface().entityPriority(1))
+                        toDoAdapter.notifyDataSetChanged()
+                    }
+                }
+                binding.HRB.setOnCheckedChangeListener { buttonView, isChecked ->
+                    if (isChecked) {
+                        array.clear()
+                        toDoDatabase.todointerface().insertValue(
+                            ToDoEntity(
+                                title = dialogBinding.ettitleCDB.text.toString(),
+                                description = dialogBinding.etdescritionCDB.text.toString(),
+                                priority = 2
+                            )
+                        )
+                        array.addAll(toDoDatabase.todointerface().entityPriority(2))
+                        toDoAdapter.notifyDataSetChanged()
+                    }
+                }
+
             }
+
         }
     }
 
@@ -62,7 +112,9 @@ class MainActivity : AppCompatActivity(), Interface {
             setPositiveButton("yes")
             { _, _ ->
                 toDoDatabase.todointerface().deleteValue(array[position])
+                array.removeAt(position)
                 toDoAdapter.notifyDataSetChanged()
+
             }
             setNegativeButton("No")
             { _, _ ->
@@ -70,7 +122,6 @@ class MainActivity : AppCompatActivity(), Interface {
             }
             setCancelable(false)
         }
-
             .show()
         getData()
     }

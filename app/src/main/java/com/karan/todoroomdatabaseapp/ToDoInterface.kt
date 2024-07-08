@@ -19,5 +19,7 @@ interface ToDoInterface {
 
     @Query("Select * from ToDoEntity")
     fun getList(): List<ToDoEntity>
+    @Query("Select * from ToDoEntity WHERE priority=:priority")
+    fun entityPriority(priority:Int):List<ToDoEntity>
 
 }

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-
 class ToDoAdapter(var array: ArrayList<ToDoEntity>, private var Interface: Interface) :
     RecyclerView.Adapter<ToDoAdapter.ViewHolder>() {
     class ViewHolder(var view: View) : RecyclerView.ViewHolder(view) {

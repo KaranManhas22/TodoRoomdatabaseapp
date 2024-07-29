@@ -1,16 +1,19 @@
 package com.karan.todoroomdatabaseapp
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.karan.todoroomdatabaseapp.databinding.ActivityMainBinding
 import com.karan.todoroomdatabaseapp.databinding.CustomDialogboxBinding
+import java.io.File
 
 class MainActivity : AppCompatActivity(), Interface {
     lateinit var binding: ActivityMainBinding
@@ -165,4 +168,6 @@ class MainActivity : AppCompatActivity(), Interface {
         array.addAll(toDoDatabase.todointerface().getList())
         toDoAdapter.notifyDataSetChanged()
     }
+
+
 }
